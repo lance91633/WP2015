@@ -1,0 +1,176 @@
+<html>
+  <head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<link rel="stylesheet" type="text/css" href="Semantic-UI-master/dist/semantic.min.css">
+    <script src="Semantic-UI-master/dist/semantic.min.js"></script>
+  <title>Bulletin</title>
+  <link href="images/favicon.ico" rel="SHORTCUT ICON">
+  </head>
+  <style type="text/css">
+   
+	body {
+		  background: url('https://ununsplash.imgix.net/uploads/141362941583982a7e0fc/abcfbca1?q=75&fm=jpg&s=5266baf09e0e878b72b2e34adf2f54a0') fixed;
+		}
+  </style>
+  
+  <body>
+  <center>
+    <h1 id='topic' class = "ui header red"></h1>
+    <h1 id='type' class = "ui header red"></h1>
+	
+	<p id='author'></p>
+	<p id='price'></p>
+	<div id='introduce' style='width:700px'></div>
+	
+	<h2 id='lastPercent'></h2>
+	<button id='free' class = "ui primary button">10% for free</button><br>
+	<br>
+	<div class="two fields">
+		<div class="field">
+		<form id='select'>
+		  <select name='percent' id='percent'>
+			<option value='select'>select</option>
+			<option value=10>10%</option>
+			<option value=20>20%</option>
+			<option value=30>30%</option>
+			<option value=40>40%</option>
+			<option value=50>50%</option>
+			<option value=100>100%</option>
+		  </select>
+		 		  
+		</form>	
+		</div>
+		<div class="field">
+		<button class="ui button positive" id='buy'>I want to buy this article.(Select how many you want to buy)</button>
+		</div>
+	</div>
+	</center>
+	<br>
+<div class="ui grid">
+	<div class = "four wide column" ></div>
+		<div class = "eight wide column" >
+		<h1 class = "ui header">Content</h1>
+			<div class="field">
+				<div id='content' style='width:700px'>
+				</div>
+			</div>
+		</div>
+	<div class = "four wide column" ></div>
+</div>
+
+	<script src="/socket.io/socket.io.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script>
+	  var socket = io();
+	  socket.on('check_part_res', function(data){
+		if(data != true){
+		  alert('Buy too much ! ');
+		}
+		else{
+			    
+	      var d = new Date();
+		  var BuyData = {
+		    account : localStorage.getItem('account'),
+		    topic : localStorage.getItem('topic'),
+		    percent : $('#percent').val(),
+		    date : d
+		  };
+	      socket.emit('buy',BuyData);
+		  
+	    }
+	  });
+	  socket.on('buy_res', function(data){
+		if(data.buyAll == 1){
+	      $('#content').html(data.content);
+		  $('#buy').hide();
+		  $('#select').hide();
+		  $('#lastPercent').hide();
+		}
+		else{
+		  $('#content').html(data.content);
+		  $('#lastPercent').html('You can buy '+data.part*10+'% of this article');
+		}
+    	$('#free').hide();		
+	  });
+	  socket.on('read_it_get',function(data){
+	    if(data.buyAll == 1){
+		  $('#buy').hide();
+		  $('#select').hide();
+		  $('#lastPercent').hide();
+		}
+		else{
+		  $('#lastPercent').html('You can buy '+data.part*10+'% of this article');
+		}
+		if(data.free == 1){
+		  $('#free').hide();
+		}
+		$('#topic').html(data.topic);
+		$('#type').html('['+data.type+']');
+		$('#author').html('Author : '+data.author);
+		$('#introduce').html('Introdution : '+data.introduction);
+		$('#content').html(data.content);
+		$('#price').html('Total Price : '+data.price+' $');
+	  });
+
+	  function getCookie(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i<ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0)==' ') c = c.substring(1);
+          if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+        }
+        return null;
+      }
+	  
+	  $(document).ready(function(){
+	    var data  = {
+		  account: localStorage.getItem('account'),
+		  topic: localStorage.getItem('topic')
+		};
+		console.log(data);
+		socket.emit('read_it_load', data);	
+	  });
+	  
+	  $('#buy').click(function(){
+	    
+	    if($('#percent').val() == 'select'){
+		  alert('You should select how much content you want to buy.');
+		}
+		else{
+		  if(confirm('Do you really want to buy it? If you have not clicked free button , you will not click it!')){
+		    var d = new Date();
+		    var BuyData = {
+		      account : localStorage.getItem('account'),
+			  topic : localStorage.getItem('topic'),
+			  percent : $('#percent').val(),
+			  date : d
+		    };
+			console.log(BuyData);
+			$('#free').hide();
+		    socket.emit('check_part',BuyData);
+			 
+		  }
+		}
+	  });
+	  
+	  $('#free').click(function(){
+	    
+		var d = new Date();
+		var Free = {
+		  account: localStorage.getItem('account'),
+		  topic: localStorage.getItem('topic'),
+		  date: d
+		};
+		
+		socket.emit('free',Free);
+	    
+	  });
+	  socket.on('free_res',function(data){
+	    $('#content').html(data);
+		$('#free').hide();
+		$('#lastPercent').html('You can buy 90% of this article');
+	  });
+	</script>
+  </body>
+</html>
