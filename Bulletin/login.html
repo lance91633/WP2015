@@ -84,13 +84,7 @@
 	
 	
 		var socket = io();
-        function stripHTML(input) {
-			var output = '';
-			if(typeof(input)=='string'){
-				var output = input.replace(/(<([^>]+)>)/ig,"");
-			}
-			return output;
-		  };
+        
 		$('#signIn').click(LogIn);
   
 		//press Enter key to log in.
@@ -103,8 +97,8 @@
   
 		function LogIn(){
 			var UserData = {
-				account :stripHTML( $('#account').val()),
-				pwd : stripHTML($('#pwd').val())
+				account :escape( $('#account').val()),
+				pwd : escape($('#pwd').val())
 			};
 
 			socket.emit('login', UserData);

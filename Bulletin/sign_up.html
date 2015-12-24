@@ -94,22 +94,16 @@
 		//if (localStorage.account != null){ //先登入才能看個資
 			
 			  var socket = io();
-			  function stripHTML(input) {
-			var output = '';
-			if(typeof(input)=='string'){
-				var output = input.replace(/(<([^>]+)>)/ig,"");
-			}
-			return output;
-		  };
+			  
 		  $('#confirm').click( function(){
 			var UserData = {
-			  account : stripHTML($('#account').val()),
-			  pwd : stripHTML($('#pwd').val()),
-			  name: stripHTML($('#name').val()),
-			  email: stripHTML($('#email').val()),
-			  addr:stripHTML( $('#addr').val()),
-			  phone: ($('#phone').val()),
-			  biography: stripHTML($('#biography').val())
+			  account : escape($('#account').val()),
+			  pwd : escape($('#pwd').val()),
+			  name: escape($('#name').val()),
+			  email: escape($('#email').val()),
+			  addr:escape( $('#addr').val()),
+			  phone: escape($('#phone').val()),
+			  biography: escape($('#biography').val())
 			};
 			
 			if(($('#account').val()=='')||($('#pwd').val()=='')||($('#name').val()=='')||($('#email').val()=='')||($('#addr').val()=='')||($('#phone').val()=='')||($('#biography').val()=='')){
