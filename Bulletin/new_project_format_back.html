@@ -253,13 +253,14 @@
 				
 				else{
 					var Project = {
-						topic: $("#topic").val(),
-						author: localStorage.account,
-						type: $("#type").val(),
-						price: $("#price").val(),
-						introduction: $("#intro").val(),
-						content: $("#content").val()
+						topic: escape($("#topic").val()),
+						author: escape(localStorage.account),
+						type: escape($("#type").val()),
+						price: escape$("#price").val()),
+						introduction: escape($("#intro").val()),
+						content: escape($("#content").val())
 					};
+					console.log(Project);
 				}
 				
 				socket.emit('sendProject', Project);
