@@ -89,6 +89,7 @@
 
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+		<script src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256.js"></script>
 		<script>
 		
 		//if (localStorage.account != null){ //先登入才能看個資
@@ -98,7 +99,7 @@
 		  $('#confirm').click( function(){
 			var UserData = {
 			  account : escape($('#account').val()),
-			  pwd : escape($('#pwd').val()),
+			  pwd : CryptoJS.SHA256(escape($('#pwd').val())).toString(),
 			  name: escape($('#name').val()),
 			  email: escape($('#email').val()),
 			  addr:escape( $('#addr').val()),
