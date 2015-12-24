@@ -205,99 +205,104 @@
 		
 		//load topic and introduce from database
 		socket.on('read_it_load', function(data){
-	  User_project.findOne({topic: data.topic}, function(err, res){
-	    Consume_record.find({account: data.account, topic: data.topic}, function(error,result){
-		  
-		  //將文章分成10個部分
-	      var cont = res.content.split('');                                     //字串分割成陣列
-		  var cont_part_length = Math.floor(cont.length/10);                    //算出每個部份的長度
-		  var cont_part = new Array(10);                                        //10個陣列
-		  for(i=1;i<10;i++){                                                    //前9個部分處理
-		    cont_part[i-1] = '';
-		    for(j=(i-1)*cont_part_length;j<i*cont_part_length;j++){
-			  if(cont[j] == '\n'){
-				cont_part[i-1] += '<br>';
-		      }
-			  else{
-				cont_part[i-1] += cont[j];
-			  } 
-		    }
-		  }   
-		  cont_part[9] = '';                                                    //第10個部分處理
-		  for(i=9*cont_part_length;i<cont.length;i++){
-		    cont_part[9] += cont[i];
-		  }
-		  
-		  var str='';
-	      var part = new Array(10);
-		  for(i=0;i<10;i++){
-		    part[i] = 0;
-		  }
-		  
-		  var loadData;
-		  
-		  if(result == ''){
-		    loadData = {
-			  topic: res.topic,
-			  type: res.type,
-			  price: res.price,
-			  author: res.author,
-			  introduction: res.introduction,
-			  content: '',
-			  part: 10,
-			  free: 0,
-			  buyAll: 0
-			};
-		  }
-		  else if(result.length == 10){
-		    for(i=0;i<10;i++){
-			  str += cont_part[i];
-			}
-		    loadData = {
-			  topic: res.topic,
-			  type: res.type,
-			  price: res.price,
-			  author: res.author,
-			  introduction: res.introduction,
-			  content: str,
-			  part: 10-result.length,
-			  free: 0,
-			  buyAll: 1
-			};
-		  }
-		  else{
-		    
-			for(i=0;i<result.length;i++){
-			  part[result[i].part-1] = 1;
-			}
-			for(i=1;i<=10;i++){
-			  if(part[i-1]==1){
-				
-				str += cont_part[i-1];
-			  }
-			  else{
-			    str += '<br><br>';
-			  }
-			}
-			loadData = {
-			  topic: res.topic,
-			  type: res.type,
-			  price: res.price,
-			  author: res.author,
-			  introduction: res.introduction,
-			  content: str,
-			  part: 10-result.length,
-			  free:0,
-			  buyAll: 0
-			};
-		  }
-		  if(result != ''){
-		    loadData.free = 1;
-		  }
-		  socket.emit('read_it_get', loadData);
-		});
-	  });
-	});
+			User_project.findOne({topic: data.topic}, function(err, res){
+				if(res.content != ''){
+					Consume_record.find({account: data.account, topic: data.topic}, function(error,result){
+					  
+					  //將文章分成10個部分
+					  var cont = res.content.split('');                                     //字串分割成陣列
+					  var cont_part_length = Math.floor(cont.length/10);                    //算出每個部份的長度
+					  var cont_part = new Array(10);                                        //10個陣列
+					  for(i=1;i<10;i++){                                                    //前9個部分處理
+						cont_part[i-1] = '';
+						for(j=(i-1)*cont_part_length;j<i*cont_part_length;j++){
+						  if(cont[j] == '\n'){
+							cont_part[i-1] += '<br>';
+						  }
+						  else{
+							cont_part[i-1] += cont[j];
+						  } 
+						}
+					  }   
+					  cont_part[9] = '';                                                    //第10個部分處理
+					  for(i=9*cont_part_length;i<cont.length;i++){
+						cont_part[9] += cont[i];
+					  }
+					  
+					  var str='';
+					  var part = new Array(10);
+					  for(i=0;i<10;i++){
+						part[i] = 0;
+					  }
+					  
+					  var loadData;
+					  
+					  if(result == ''){
+						loadData = {
+						  topic: res.topic,
+						  type: res.type,
+						  price: res.price,
+						  author: res.author,
+						  introduction: res.introduction,
+						  content: '',
+						  part: 10,
+						  free: 0,
+						  buyAll: 0
+						};
+					  }
+					  else if(result.length == 10){
+						for(i=0;i<10;i++){
+						  str += cont_part[i];
+						}
+						loadData = {
+						  topic: res.topic,
+						  type: res.type,
+						  price: res.price,
+						  author: res.author,
+						  introduction: res.introduction,
+						  content: str,
+						  part: 10-result.length,
+						  free: 0,
+						  buyAll: 1
+						};
+					  }
+					  else{
+						
+						for(i=0;i<result.length;i++){
+						  part[result[i].part-1] = 1;
+						}
+						for(i=1;i<=10;i++){
+						  if(part[i-1]==1){
+							
+							str += cont_part[i-1];
+						  }
+						  else{
+							str += '<br><br>';
+						  }
+						}
+						loadData = {
+						  topic: res.topic,
+						  type: res.type,
+						  price: res.price,
+						  author: res.author,
+						  introduction: res.introduction,
+						  content: str,
+						  part: 10-result.length,
+						  free:0,
+						  buyAll: 0
+						};
+					  }
+					  if(result != ''){
+						loadData.free = 1;
+					  }
+					  socket.emit('read_it_get', loadData);
+					});
+				}
+				else{
+					socket.emit('read_it_get', false);
+				}
+			});
+	    });
 	
 	
 	//check the number of parts you can buy
@@ -525,7 +530,7 @@
 	  res.sendfile('login.html');
 	});
 	app.get('/new_project_format', function(req, res){
-	  res.sendfile('new_project_format.html');
+	  res.sendfile('new_project_format_back.html');
 	});
 	app.get('/read_it', function(req, res){
 	  res.sendfile('single-post.html');  

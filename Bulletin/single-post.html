@@ -308,24 +308,29 @@ http://www.templatemo.com/free-website-templates/417-grill
 			$('#free').hide();		
 		  });
 		  socket.on('read_it_get',function(data){
-			if(data.buyAll == 1){
-			  $('#buy').hide();
-			  $('#select').hide();
-			  $('#lastPercent').hide();
+		    if(data == false){
+			    window.location.href = 'http://luffy.ee.ncku.edu.tw:8011/user';
 			}
 			else{
-			  $('#lastPercent').html('You can buy '+data.part*10+'% of this article');
+				if(data.buyAll == 1){
+				  $('#buy').hide();
+				  $('#select').hide();
+				  $('#lastPercent').hide();
+				}
+				else{
+				  $('#lastPercent').html('You can buy '+data.part*10+'% of this article');
+				}
+				if(data.free == 1){
+				  $('#free').hide();
+				}
+				$('#topic').html(data.topic);
+				$('#topic1').html(data.topic);
+				$('#type').html('['+data.type+']');
+				$('#author').html('Author : '+data.author);
+				$('#introduce').html(data.introduction);
+				$('#content').html(data.content);
+				$('#price').html('Total Price : '+data.price+' $');
 			}
-			if(data.free == 1){
-			  $('#free').hide();
-			}
-			$('#topic').html(data.topic);
-			$('#topic1').html(data.topic);
-			$('#type').html('['+data.type+']');
-			$('#author').html('Author : '+data.author);
-			$('#introduce').html(data.introduction);
-			$('#content').html(data.content);
-			$('#price').html('Total Price : '+data.price+' $');
 		  });
 
 		  function getCookie(cname) {
