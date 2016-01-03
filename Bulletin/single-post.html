@@ -141,6 +141,16 @@ http://www.templatemo.com/free-website-templates/417-grill
 													<h3>Introduction</h3>
 													<p id='introduce' style='width:700px'></p>
                                                     
+													<div id = 'star'>
+													    
+														<div id = 'starButton'>
+														    <h3>You can give star to this article.</h3>
+															<button id = 'star1'>1</button><button id = 'star2'>2</button><button id = 'star3'>3</button><button id = 'star4'>4</button><button id = 'star5'>5</button>
+														</div>
+														<p id = 'average'></p>
+													</div>  
+													
+													
 													<h3>Content</h3>
 													<button id='free' class = "btn btn-primary">10% for free</button>
 													<p id = "content"></p>
@@ -263,7 +273,8 @@ http://www.templatemo.com/free-website-templates/417-grill
                     <div class="bottom-footer">
                         <p>Copyright © 2015 <a href="#">Bulletin</a></p>
                     </div>
-                    
+					
+					
                 </div>
             </footer>
 
@@ -333,8 +344,26 @@ http://www.templatemo.com/free-website-templates/417-grill
 				$('#price').html('Total Price : '+data.price+' $');
 			}
 		  });
+		  
+		  socket.on('get_it_star',function(data){
+		    if(data == false){
+			    $('#average').html('There is no people give star.');
+			}
+			else{
+				var str;
+				if(data.you != false){
+				str = ' You give this article '+data.you+' star.<br> Average :'+data.average+' <br> 1 star : '+data.count.star1+' people <br> 2 stars : '+data.count.star2+' people <br> 3 stars : '+data.count.star3+' people <br> 4 stars : '+data.count.star4+' people <br> 5 stars : '+data.count.star5 +' people <br> There are '+data.total+' people give this article star.'
+				    $('#average').html(str);
+				    $('#starButton').hide();
+				}
+				else{
+				    str = 'Average :'+data.average+' <br> 1 star : '+data.count.star1+' people <br> 2 stars : '+data.count.star2+' people <br> 3 stars : '+data.count.star3+' people <br> 4 stars : '+data.count.star4+' people <br> 5 stars : '+data.count.star5 +' people <br> There are '+data.total+' people give this article star.'
+				    $('#average').html(str);	
+				}
+			}
+		  });
 
-		  function getCookie(cname) {
+		  /*function getCookie(cname) {
 			var name = cname + "=";
 			var ca = document.cookie.split(';');
 			for(var i=0; i<ca.length; i++) {
@@ -343,14 +372,14 @@ http://www.templatemo.com/free-website-templates/417-grill
 			  if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
 			}
 			return null;
-		  }
+		  }*/
 		  
 		  $(document).ready(function(){
 			var data  = {
 			  account: localStorage.getItem('account'),
 			  topic: localStorage.getItem('topic')
 			};
-			console.log(data);
+			socket.emit('read_it_star',data);
 			socket.emit('read_it_load', data);	
 		  });
 		  
@@ -368,7 +397,6 @@ http://www.templatemo.com/free-website-templates/417-grill
 				  percent : $('#percent').val(),
 				  date : d.getFullYear()+'/'+d.getMonth()+'/'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds()+'.'+d.getMilliseconds()
 				};
-				console.log(BuyData);
 				$('#free').hide();
 				socket.emit('check_part',BuyData);
 				 
@@ -392,6 +420,54 @@ http://www.templatemo.com/free-website-templates/417-grill
 			$('#content').html(data);
 			$('#free').hide();
 			$('#lastPercent').html('You can buy 90% of this article');
+		  });
+		  
+		  
+		  $('#star1').click(function(){
+			var data = {
+			  star : 1,
+			  account : localStorage.getItem('account'),
+			  topic : localStorage.getItem('topic')
+			};
+			socket.emit('star',data);
+		  });
+		  $('#star2').click(function(){
+			var data = {
+			  star : 2,
+			  account : localStorage.getItem('account'),
+			  topic : localStorage.getItem('topic')
+			};
+			socket.emit('star',data);
+		  });
+		  $('#star3').click(function(){
+			var data = {
+			  star : 3,
+			  account : localStorage.getItem('account'),
+			  topic : localStorage.getItem('topic')
+			};
+			socket.emit('star',data);
+		  });
+		  $('#star4').click(function(){
+			var data = {
+			  star : 4,
+			  account : localStorage.getItem('account'),
+			  topic : localStorage.getItem('topic')
+			};
+			socket.emit('star',data);
+		  });
+		  $('#star5').click(function(){
+			var data = {
+			  star : 5,
+			  account : localStorage.getItem('account'),
+			  topic : localStorage.getItem('topic')
+			};
+			socket.emit('star',data);
+		  });
+		  
+		  socket.on('res_star',function(data){
+			var str = ' You give this article '+data.you+' star. \n Average :'+data.average+' \n 1 star : '+data.count.star1+' people \n 2 stars : '+data.count.star2+' people \n 3 stars : '+data.count.star3+' people \n 4 stars : '+data.count.star4+' people \n 5 stars : '+data.count.star5 +' people \n There are '+data.total+' people give this article star.'
+			$('#average').html(str);
+			$('#starButton').hide();
 		  });
 		}
 		
