@@ -701,35 +701,35 @@
 	  });  
 	});
 	
-	app.use(express.static(__dirname ));
+	app.use(express.static(__dirname + '/public' ));
 
 	//connect html
 	app.get('/', function(req, res){
-	  res.sendfile('login.html');
+	  res.sendfile('public/login.html');
 	});
 	app.get('/user', function(req, res){
-	  res.sendfile('main2.html');
+	  res.sendfile('public/main2.html');
 	});
 	app.get('/sign_up', function(req, res){
-	  res.sendfile('sign_up.html');
+	  res.sendfile('public/sign_up.html');
 	});
 	app.get('/login', function(req, res){
-	  res.sendfile('login.html');
+	  res.sendfile('public/login.html');
 	});
 	app.get('/new_project_format', function(req, res){
-	  res.sendfile('new_project_format_back.html');
+	  res.sendfile('public/new_project_format_back.html');
 	});
 	app.get('/read_it', function(req, res){
-	  res.sendfile('single-post.html');  
+	  res.sendfile('public/single-post.html');  
 	});
 	app.get('/index', function(req, res){
-	  res.sendfile('index.html');  
+	  res.sendfile('public/index.html');  
 	});
 	app.get('/profile', function(req, res){
-	  res.sendfile('profile.html');  
+	  res.sendfile('public/profile.html');  
 	});
 	app.get('/single-post', function(req, res){
-	  res.sendfile('single-post.html');  
+	  res.sendfile('public/single-post.html');  
 	});
 	http.listen(8011);
 
