@@ -50,10 +50,16 @@
 		price: {type: Number},
 		date: {type: String}
 	  });
+	  var Star = new Schema({
+		account : {type : String},
+		topic : {type : String},
+		star : {type : Number}
+	  });
 	  var User = mongoose.model('account' , AccountMg);
 	  var User_data = mongoose.model('data' , UserData);
 	  var User_project = mongoose.model('project' , Project);
 	  var Consume_record = mongoose.model('record', Record);
+	  var Star = mongoose.model('star',Star);
 	  
 	  
 	  io.on('connection',function(socket){
@@ -238,65 +244,70 @@
 					  
 					  var loadData;
 					  
-					  if(result == ''){
-						loadData = {
-						  topic: res.topic,
-						  type: res.type,
-						  price: res.price,
-						  author: res.author,
-						  introduction: res.introduction,
-						  content: '',
-						  part: 10,
-						  free: 0,
-						  buyAll: 0
-						};
-					  }
-					  else if(result.length == 10){
-						for(i=0;i<10;i++){
-						  str += cont_part[i];
+  
+						if(result == ''){
+							loadData = {
+							  topic: res.topic,
+							  type: res.type,
+							  price: res.price,
+							  author: res.author,
+							  introduction: res.introduction,
+							  content: '',
+							  part: 10,
+							  free: 0,
+							  buyAll: 0,
+							  price: res.price
+							};
 						}
-						loadData = {
-						  topic: res.topic,
-						  type: res.type,
-						  price: res.price,
-						  author: res.author,
-						  introduction: res.introduction,
-						  content: str,
-						  part: 10-result.length,
-						  free: 0,
-						  buyAll: 1
-						};
-					  }
-					  else{
-						
-						for(i=0;i<result.length;i++){
-						  part[result[i].part-1] = 1;
+						else if(result.length == 10){
+							for(i=0;i<10;i++){
+							  str += cont_part[i];
+							}
+							loadData = {
+							  topic: res.topic,
+							  type: res.type,
+							  price: res.price,
+							  author: res.author,
+							  introduction: res.introduction,
+							  content: str,
+							  part: 10-result.length,
+							  free: 0,
+							  buyAll: 1,
+							  price: res.price
+							};
 						}
-						for(i=1;i<=10;i++){
-						  if(part[i-1]==1){
+						else{
 							
-							str += cont_part[i-1];
-						  }
-						  else{
-							str += '<br><br>';
-						  }
+							for(i=0;i<result.length;i++){
+							  part[result[i].part-1] = 1;
+							}
+							for(i=1;i<=10;i++){
+							  if(part[i-1]==1){
+								
+								str += cont_part[i-1];
+							  }
+							  else{
+								str += '<br><br>';
+							  }
+							}
+							loadData = {
+							  topic: res.topic,
+							  type: res.type,
+							  price: res.price,
+							  author: res.author,
+							  introduction: res.introduction,
+							  content: str,
+							  part: 10-result.length,
+							  free:0,
+							  buyAll: 0,
+							  price: res.price
+							};
 						}
-						loadData = {
-						  topic: res.topic,
-						  type: res.type,
-						  price: res.price,
-						  author: res.author,
-						  introduction: res.introduction,
-						  content: str,
-						  part: 10-result.length,
-						  free:0,
-						  buyAll: 0
-						};
-					  }
-					  if(result != ''){
-						loadData.free = 1;
-					  }
-					  socket.emit('read_it_get', loadData);
+						if(result != ''){
+							loadData.free = 1;
+						}
+						  
+						socket.emit('read_it_get', loadData);
 					});
 				}
 				else{
@@ -412,7 +423,7 @@
 			  part[result[i].part-1] = 1; 
 			}
 			var rand = Math.floor(Math.random()*9.99);
-			for(i=0;i<Math.floor(data.percent/10);i++){console.log(data.price);
+			for(i=0;i<Math.floor(data.percent/10);i++){
 		      while(part[rand] == 1 ){                          
 			    rand = Math.floor(Math.random()*9.99);
 			  }
@@ -465,7 +476,7 @@
 		  Consume_record.findOne({account:data.account,topic:data.topic},function(error,result){
 			if(result == null){
 			  User_project.findOne({topic:data.topic},function(err,res){
-			  console.log(data);
+			  
 				//將文章分成10個部分
 				var cont = res.content.split('');                                     //字串分割成陣列
 				var cont_part_length = Math.floor(cont.length/10);                    //算出每個部份的長度
@@ -495,8 +506,7 @@
 					  price: 0,
 					  date: data.date
 				}).save();
-				console.log(cont_part[rand]); 
-				console.log(rand);
+				
 				var str = '';
 				for(i=0;i<10;i++){
 				  if(i != rand)
@@ -575,6 +585,117 @@
 		  });
 		});
 		//消費紀錄
+		///////////////////////////////////
+		///////////////////////////////////
+		//文章評分
+		socket.on('star',function(data){
+			new Star({
+				account : data.account,
+				topic : data.topic,
+				star : data.star
+			}).save();
+			
+			Star.find({topic : data.topic},function(err,res){             //計算平均
+				if(res != ''){
+					var average = 0;
+					var starCount = {
+						star1 : 0,
+						star2 : 0,
+						star3 : 0,
+						star4 : 0,
+						star5 : 0,
+					};
+					for(i=0;i<res.length;i++){
+					
+						average += res[i].star;
+						
+						if(res[i].star == 1){
+							starCount.star1++;
+						}
+						if(res[i].star == 2){
+							starCount.star2++;
+						}
+						if(res[i].star == 3){
+							starCount.star3++;
+						}
+						if(res[i].star == 4){
+							starCount.star4++;
+						}
+						if(res[i].star == 5){
+							starCount.star5++;
+						}
+					}
+					average = average/res.length;
+					
+					var starData = {
+						total : res.length,
+						average : average,
+						count : starCount,
+						you : data.star
+					};
+					
+					socket.emit('res_star',starData);
+					
+				}
+			});
+		});
+		
+		socket.on('read_it_star',function(data){
+		    Star.find({topic : data.topic},function(err,res){             //計算平均
+				if(res != ''){
+					var average = 0;
+					var starCount = {
+						star1 : 0,
+						star2 : 0,
+						star3 : 0,
+						star4 : 0,
+						star5 : 0,
+					};
+					for(i=0;i<res.length;i++){
+					
+						average += res[i].star;
+						
+						if(res[i].star == 1){
+							starCount.star1++;
+						}
+						if(res[i].star == 2){
+							starCount.star2++;
+						}
+						if(res[i].star == 3){
+							starCount.star3++;
+						}
+						if(res[i].star == 4){
+							starCount.star4++;
+						}
+						if(res[i].star == 5){
+							starCount.star5++;
+						}
+					}
+					average = average/res.length;
+					
+					Star.findOne({account:data.account,topic:data.topic},function(error,result){
+					
+
+						var starData = {
+							total : res.length,
+							average : average,
+							count : starCount,
+							you : false
+						};
+						
+						if(result != null){
+						    starData.you = result.star;
+						}
+						
+						socket.emit('get_it_star',starData);
+					});
+				}
+				else{
+				    socket.emit('get_it_star',false);
+				}
+			});
+		});
+		//文章評分
 		///////////////////////////////////
 	  });  
 	});
