@@ -78,7 +78,9 @@
 		
 		</div>
 		
-		
+		<button id='d'>consume record</button>
+		<div id='record'>
+		</div>
 		
 	</div>
 
@@ -87,7 +89,7 @@
 	<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script>
 		var socket = io();
-		
+		var count = 0;
 		if (localStorage.account != null){ //先登入才能看個資
 
 			socket.emit('req_profile', localStorage.account);
@@ -108,12 +110,33 @@
 					$('#biography').html(data.biography);
 				}
 			});
+			
+			
 		}
 		
 		else{
 			alert('Please log in first.');
 			window.location.href = "http://luffy.ee.ncku.edu.tw:8011/";
-		}	
+		}
+		$('#d').click(function(){
+		    if(count%2 == 0){
+			    socket.emit('get_record',localStorage.getItem('account'));
+				count++
+			}
+			else{
+			    $('#record').html('');
+				count++;
+			}
+		});
+			  
+		socket.on('res_record',function(data){
+			var str = '';
+			for(i=0;i<data.length;i++){
+				str += 'You spent '+data[i].price*data[i].count+'$ on '+data[i].count * 10+'% of the article " '+data[i].topic+' " at '+data[i].date+'<br>';
+			}
+			$('#record').html(str);
+			
+		});	
 		
 	</script>
 	
