@@ -466,7 +466,7 @@ http://www.templatemo.com/free-website-templates/417-grill
 		  });
 		  
 		  socket.on('res_star',function(data){
-			var str = ' You give this article '+data.you+' star. \n Average :'+data.average+' \n 1 star : '+data.count.star1+' people \n 2 stars : '+data.count.star2+' people \n 3 stars : '+data.count.star3+' people \n 4 stars : '+data.count.star4+' people \n 5 stars : '+data.count.star5 +' people \n There are '+data.total+' people give this article star.'
+			var str = ' You give this article '+data.you+' star. <br> Average :'+data.average+' <br> 1 star : '+data.count.star1+' people <br> 2 stars : '+data.count.star2+' people <br> 3 stars : '+data.count.star3+' people <br> 4 stars : '+data.count.star4+' people <br> 5 stars : '+data.count.star5 +' people <br> There are '+data.total+' people give this article star.'
 			$('#average').html(str);
 			$('#starButton').hide();
 		  });
