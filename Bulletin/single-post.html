@@ -288,8 +288,9 @@ http://www.templatemo.com/free-website-templates/417-grill
 				account : localStorage.getItem('account'),
 				topic : localStorage.getItem('topic'),
 				percent : $('#percent').val(),
-				date : d
+				date : d.getFullYear()+'/'+d.getMonth()+'/'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds()+'.'+d.getMilliseconds()
 			  };
+			  console.log(BuyData.date);
 			  socket.emit('buy',BuyData);
 			  
 			}
@@ -365,7 +366,7 @@ http://www.templatemo.com/free-website-templates/417-grill
 				  account : localStorage.getItem('account'),
 				  topic : localStorage.getItem('topic'),
 				  percent : $('#percent').val(),
-				  date : d
+				  date : d.getFullYear()+'/'+d.getMonth()+'/'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds()+'.'+d.getMilliseconds()
 				};
 				console.log(BuyData);
 				$('#free').hide();
@@ -381,7 +382,7 @@ http://www.templatemo.com/free-website-templates/417-grill
 			var Free = {
 			  account: localStorage.getItem('account'),
 			  topic: localStorage.getItem('topic'),
-			  date: d
+			  date: d.getFullYear()+'/'+d.getMonth()+'/'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds()+'.'+d.getMilliseconds()
 			};
 			
 			socket.emit('free',Free);

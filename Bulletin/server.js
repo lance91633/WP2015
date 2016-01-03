@@ -47,7 +47,8 @@
 		account: {type: String},
 		topic: {type: String},
 		part: {type: Number},
-		date: {type: Object}
+		price: {type: Number},
+		date: {type: String}
 	  });
 	  var User = mongoose.model('account' , AccountMg);
 	  var User_data = mongoose.model('data' , UserData);
@@ -350,7 +351,6 @@
 	socket.on('buy', function(data){
 	
 	  User_project.findOne({topic : data.topic}, function(err, res){
-	    
 		//將文章分成10個部分
 	    var cont = res.content.split('');                                     //字串分割成陣列
 		var cont_part_length = Math.floor(cont.length/10);                    //算出每個部份的長度
@@ -390,8 +390,10 @@
 			      account: data.account,
 	              topic: data.topic,
 	              part: rand+1,
+				  price: res.price/10,
 	              date: data.date
 			    }).save();
+				
 			  rand = Math.floor(Math.random()*9.99);
 		    }
 			for(i=1;i<=10;i++){
@@ -410,7 +412,7 @@
 			  part[result[i].part-1] = 1; 
 			}
 			var rand = Math.floor(Math.random()*9.99);
-			for(i=0;i<Math.floor(data.percent/10);i++){
+			for(i=0;i<Math.floor(data.percent/10);i++){console.log(data.price);
 		      while(part[rand] == 1 ){                          
 			    rand = Math.floor(Math.random()*9.99);
 			  }
@@ -419,8 +421,10 @@
 			      account: data.account,
 	              topic: data.topic,
 	              part: rand+1,
+				  price: res.price/10,
 	              date: data.date
 			  }).save();
+			  
 			  rand = Math.floor(Math.random()*9.99);
 		    }
 			for(i=1;i<=10;i++){
@@ -510,6 +514,67 @@
 		  });
 		});
 		//免費10%
+		///////////////////////////////////
+		///////////////////////////////////
+		//消費紀錄
+		socket.on('get_record',function(data){
+		  Consume_record.find({account:data},function(err,res){
+			if(res != ''){
+			  var count = 1;
+			  var str1=res[0].topic;
+			  var str2=res[0].date;
+			  var str3=res[0].price;
+			  for(i=0;i<res.length;i++){
+				if(i+1 != res.length){
+					if(res[i].date != res[i+1].date){
+					  count++;
+					  str1 += ','+res[i+1].topic;
+					  str2 += ','+res[i+1].date;
+					  str3 += ','+res[i+1].price;
+					}
+				}
+				
+				
+			  }
+			  
+			  
+			  var d = new Array(count);
+			  var p = 0;
+			  for(i=0;i<count;i++){
+				d[i] = 1;
+			  }
+			  for(i=0;i<res.length;i++){
+				if(i+1 != res.length){
+					if(res[i].date == res[i+1].date){
+					  d[p]++;
+					}
+					else{
+					  p++;
+					}
+				}
+				
+			  }
+			  
+			  var topic = str1.split(',');
+			  var date_data = str2.split(',');
+			  var price_data = str3.split(',');
+			  var record_data = new Array(count);
+			  for(i=0;i<count;i++){
+				record_data[i] = {
+				  topic : topic[i],
+				  date : date_data[i],
+				  price : price_data[i],
+				  count : d[i]
+				};
+			  }
+			  
+			  socket.emit('res_record',record_data);
+			}
+			
+			
+		  });
+		});
+		//消費紀錄
 		///////////////////////////////////
 	  });  
 	});
