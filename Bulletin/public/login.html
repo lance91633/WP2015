@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+		<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+   
+       <link rel="stylesheet" type="text/css" href="Semantic-UI-master/dist/semantic.min.css">
+        <script src="Semantic-UI-master/dist/semantic.min.js"></script>
+		<title>Login</title>
+		<link href="images/favicon.ico" rel="SHORTCUT ICON">
+  </head> 
+  <style type="text/css">
+   
+	body {
+		  background: url('https://ununsplash.imgix.net/uploads/141362941583982a7e0fc/abcfbca1?q=75&fm=jpg&s=5266baf09e0e878b72b2e34adf2f54a0') fixed;
+		}
+  </style>
+    
+    
+  <body >
+  <header>
+  <div class="ui inverted segment">
+		<div class="ui  violet basic  inverted masssive center button" onclick="location.href='http://luffy.ee.ncku.edu.tw:8011/' " ><a>Back to the mainpage</a></div>      
+  </div>
+  </header>
+  <br></br>
+
+  <h2 class="ui center aligned icon header">
+	<i class="circular user icon"></i>
+  </h2>
+    <br></br>
+  <br></br>
+   <div class="ui grid">
+   
+       <div class = "four wide column" ></div>
+       <div class = "eight wide column" >
+       <div class="ui  inverted segment">
+            <div class="ui two column middle aligned very relaxed stackable grid">
+  <div class="column">
+    <div class="ui inverted form ">
+      <div class="field">
+        <label>Username</label>
+        <div class="ui left icon input">
+          <input type="text" id = "account" placeholder="Username">
+          <i class="user icon"></i>
+        </div>
+      </div>
+      <div class="field ">
+        <label >Password</label>
+        <div class="ui left icon input">
+          <input type="password" id="pwd">
+          <i class="lock icon"></i>
+        </div>
+      </div>
+      <div class="ui blue submit button" id="signIn">Login</div>
+    </div>
+  </div>
+          
+  <div class="ui vertical inverted divider">
+    Or
+  </div>
+  <div class="center aligned column">
+      
+    <div class="ui big green labeled icon button" id="signUp" onclick="location.href='sign_up.html' ">
+      <i class="signup icon"></i>
+      Sign Up
+    </div>
+  </div>
+</div>
+</div>
+       </div>
+           
+       <div class = "four wide column" ></div>
+   </div>  
+      
+     <footer>
+	 
+</footer>	 
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256.js"></script>
+    <script>
+	
+	
+		var socket = io();
+        
+		$('#signIn').click(LogIn);
+  
+		//press Enter key to log in.
+		$("#pwd").keyup(function(e){
+			code = (e.keyCode ? e.keyCode : e.which);
+			if (code == 13){
+				LogIn();
+			}
+		});
+  
+		function LogIn(){
+			var UserData = {
+				account :escape( $('#account').val()),
+				pwd : CryptoJS.SHA256(escape($('#pwd').val())).toString()
+			};
+
+			socket.emit('login', UserData);
+			socket.on('log', function(data){
+				if(data == false){
+					alert('Error Account or Password');
+				}
+				
+				//2015/12/02
+				else if(data == 'Error'){
+					alert('Error login');
+				}
+				
+				else if(data == true){
+					alert('This account has been login already ');
+				}
+				////////////////
+				else{
+					localStorage.setItem('account',data.data.account);
+					localStorage.setItem('name',data.data.name);
+					localStorage.setItem('email',data.data.email);
+					localStorage.setItem('addr',data.data.addr); 
+					localStorage.setItem('phone',data.data.phone);
+					localStorage.setItem('biography',data.data.biography); 
+					localStorage.setItem('stat', data.stat);
+					localStorage.setItem('record', data.record);
+					window.location.href = "http://luffy.ee.ncku.edu.tw:8011/user";				
+				}
+			});		
+		}
+	
+	</script>
+  </body>
+</html>
+
+

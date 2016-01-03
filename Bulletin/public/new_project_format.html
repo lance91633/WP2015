@@ -1,0 +1,256 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="Semantic-UI-master/dist/semantic.min.css">
+        <script src="Semantic-UI-master/dist/semantic.min.js"></script>
+
+	
+		<link rel="stylesheet" type="text/css" href="quill.snow.css">
+		<link rel="stylesheet" type="text/css" href="advanced.css">
+		
+		<title>New project</title>
+		<link href="images/favicon.ico" rel="SHORTCUT ICON">
+	</head>
+	<style type="text/css">
+    body {
+      background: url('http://vignette1.wikia.nocookie.net/vsbattles/images/a/a3/Black-windows_542931.jpg/revision/latest?cb=20150317090032') fixed;
+    }
+    body > .grid {
+      height: 100%;
+    
+</style>
+	
+	<body bgcolor = "orange">
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+		<h2 class="ui center aligned icon header">
+			<i class="circular write icon inverted"></i>
+		</h2>
+	
+		<div class="ui grid">
+			<div class = "one wide column" ></div>
+				<div class = "fourteen wide column" >	
+					<div class="ui   segment">
+						<div class="ui  form">
+						
+							<div class="two fields">
+								<div class="field">
+									<label>Topic</label>
+									<input id = "topic"></input>
+								</div>
+								
+							<div class="field">
+								<label>Price</label>
+								<input id = "price" onkeyup="value=value.replace(/[^\d]/g,'') " placeholder = "USD"></input>
+								</div>
+							</div>
+							
+							<div class="field">
+								<label>Type</label>
+								<select name="Type" id = "type">
+									<option value="Idea Pitching">Idea Pitching</option>
+									<option value="Problems">Problems</option>
+									<option value="Tutorial">Tutorial</option>
+									<option value="Science">Science</option>
+								　	<option value="Politics">Politics</option>
+								　	<option value="International">International News</option>
+								　	<option value="History">History</option>
+								　	<option value="History">Arts</option>
+								</select>
+							</div>
+							
+							<div class="field">					
+								<label>Introduction</label>
+								<textarea id = "intro" 
+									maxlength="100" 
+									onkeyup="return DjCheckMaxlength(this);" 
+									placeholder = "Please describe your idea briefly."
+									rows = "10"
+									cols = "50"></textarea>
+							</div>
+							
+							<div class="field">
+							
+							<label>Content</label>
+							
+								<div id="content-container">
+							  <div class="advanced-wrapper">
+								<div class="toolbar-container"><span class="ql-format-group">
+									<select title="Font" class="ql-font">
+									  <option value="sans-serif" selected>Sans Serif</option>
+									  <option value="Georgia, serif">Serif</option>
+									  <option value="Monaco, 'Courier New', monospace">Monospace</option>
+									</select>
+									<select title="Size" class="ql-size">
+									  <option value="10px">Small</option>
+									  <option value="13px" selected>Normal</option>
+									  <option value="18px">Large</option>
+									  <option value="32px">Huge</option>
+									</select></span><span class="ql-format-group"><span title="Bold" class="ql-format-button ql-bold"></span><span class="ql-format-separator"></span><span title="Italic" class="ql-format-button ql-italic"></span><span class="ql-format-separator"></span><span title="Underline" class="ql-format-button ql-underline"></span></span><span class="ql-format-group">
+									<select title="Text Color" class="ql-color">
+									  <option value="rgb(0, 0, 0)" selected></option>
+									  <option value="rgb(230, 0, 0)"></option>
+									  <option value="rgb(255, 153, 0)"></option>
+									  <option value="rgb(255, 255, 0)"></option>
+									  <option value="rgb(0, 138, 0)"></option>
+									  <option value="rgb(0, 102, 204)"></option>
+									  <option value="rgb(153, 51, 255)"></option>
+									  <option value="rgb(255, 255, 255)"></option>
+									  <option value="rgb(250, 204, 204)"></option>
+									  <option value="rgb(255, 235, 204)"></option>
+									  <option value="rgb(255, 255, 204)"></option>
+									  <option value="rgb(204, 232, 204)"></option>
+									  <option value="rgb(204, 224, 245)"></option>
+									  <option value="rgb(235, 214, 255)"></option>
+									  <option value="rgb(187, 187, 187)"></option>
+									  <option value="rgb(240, 102, 102)"></option>
+									  <option value="rgb(255, 194, 102)"></option>
+									  <option value="rgb(255, 255, 102)"></option>
+									  <option value="rgb(102, 185, 102)"></option>
+									  <option value="rgb(102, 163, 224)"></option>
+									  <option value="rgb(194, 133, 255)"></option>
+									  <option value="rgb(136, 136, 136)"></option>
+									  <option value="rgb(161, 0, 0)"></option>
+									  <option value="rgb(178, 107, 0)"></option>
+									  <option value="rgb(178, 178, 0)"></option>
+									  <option value="rgb(0, 97, 0)"></option>
+									  <option value="rgb(0, 71, 178)"></option>
+									  <option value="rgb(107, 36, 178)"></option>
+									  <option value="rgb(68, 68, 68)"></option>
+									  <option value="rgb(92, 0, 0)"></option>
+									  <option value="rgb(102, 61, 0)"></option>
+									  <option value="rgb(102, 102, 0)"></option>
+									  <option value="rgb(0, 55, 0)"></option>
+									  <option value="rgb(0, 41, 102)"></option>
+									  <option value="rgb(61, 20, 102)"></option>
+									</select><span class="ql-format-separator"></span>
+									<select title="Background Color" class="ql-background">
+									  <option value="rgb(0, 0, 0)"></option>
+									  <option value="rgb(230, 0, 0)"></option>
+									  <option value="rgb(255, 153, 0)"></option>
+									  <option value="rgb(255, 255, 0)"></option>
+									  <option value="rgb(0, 138, 0)"></option>
+									  <option value="rgb(0, 102, 204)"></option>
+									  <option value="rgb(153, 51, 255)"></option>
+									  <option value="rgb(255, 255, 255)" selected></option>
+									  <option value="rgb(250, 204, 204)"></option>
+									  <option value="rgb(255, 235, 204)"></option>
+									  <option value="rgb(255, 255, 204)"></option>
+									  <option value="rgb(204, 232, 204)"></option>
+									  <option value="rgb(204, 224, 245)"></option>
+									  <option value="rgb(235, 214, 255)"></option>
+									  <option value="rgb(187, 187, 187)"></option>
+									  <option value="rgb(240, 102, 102)"></option>
+									  <option value="rgb(255, 194, 102)"></option>
+									  <option value="rgb(255, 255, 102)"></option>
+									  <option value="rgb(102, 185, 102)"></option>
+									  <option value="rgb(102, 163, 224)"></option>
+									  <option value="rgb(194, 133, 255)"></option>
+									  <option value="rgb(136, 136, 136)"></option>
+									  <option value="rgb(161, 0, 0)"></option>
+									  <option value="rgb(178, 107, 0)"></option>
+									  <option value="rgb(178, 178, 0)"></option>
+									  <option value="rgb(0, 97, 0)"></option>
+									  <option value="rgb(0, 71, 178)"></option>
+									  <option value="rgb(107, 36, 178)"></option>
+									  <option value="rgb(68, 68, 68)"></option>
+									  <option value="rgb(92, 0, 0)"></option>
+									  <option value="rgb(102, 61, 0)"></option>
+									  <option value="rgb(102, 102, 0)"></option>
+									  <option value="rgb(0, 55, 0)"></option>
+									  <option value="rgb(0, 41, 102)"></option>
+									  <option value="rgb(61, 20, 102)"></option>
+									</select><span class="ql-format-separator"></span>
+									<select title="Text Alignment" class="ql-align">
+									  <option value="left" selected></option>
+									  <option value="center"></option>
+									  <option value="right"></option>
+									  <option value="justify"></option>
+									</select></span><span class="ql-format-group"><span title="Link" class="ql-format-button ql-link"></span><span class="ql-format-separator"></span><span title="Image" class="ql-format-button ql-image"></span><span class="ql-format-separator"></span><span title="List" class="ql-format-button ql-list"></span></span></div>
+								<div class="editor-container" id = "content"></div>
+							  </div>
+							</div>
+							
+						
+					</div>
+					
+					<div class="field">
+							
+				<button class="ui positive button" type = "submit" id = "submit">
+							  Submit
+							</button>
+							<button class="ui button" id = "cancel">
+							  Cancel
+							</button>
+							</div>
+						</div>	
+		</div>
+				</div>
+		</div>
+		
+		<script language="javascript" type="text/javascript">
+			if (localStorage.account != null){
+			var socket = io();
+			function stripHTML(input) {
+			var output = '';
+			if(typeof(input)=='string'){
+				var output = input.replace(/(<([^>]+)>)/ig,"");
+			}
+			return output;
+		  };
+			//檢查字數
+			function DjCheckMaxlength(oInObj)
+			{
+				var iMaxLen = parseInt(oInObj.getAttribute('maxlength'));
+				var iCurLen = oInObj.value.length;
+
+				if ( oInObj.getAttribute && iCurLen > iMaxLen )
+				{
+					oInObj.value = oInObj.value.substring(0, iMaxLen);
+				}
+			}  //@ END OF DjCheckMaxlength()
+			
+			//提交專案
+			$('#submit').click(Submit_project);
+	
+			function Submit_project() {
+				if ( stripHTML($("#topic").val()=='') || stripHTML($("#price").val()=='') || stripHTML($("#intro").val() =='') || stripHTML($("#content").val() =='')){
+					alert('請填寫每一項目');
+				}
+				
+				else{
+					var Project = {
+						topic:stripHTML( $("#topic").val()),
+						author: localStorage.account,
+						type: stripHTML($("#type").val()),
+						price: stripHTML($("#price").val()),
+						introduction:stripHTML( $("#intro").val()),
+						content: stripHTML($("#content").val())
+					};
+				}
+				
+				socket.emit('sendProject', Project);
+			}
+			
+			socket.on('save_project_res', function(){
+				console.log("testtttt");
+				window.location.href = "http://luffy.ee.ncku.edu.tw:8011/user";
+			});
+			
+			socket.on('exited_project', function(){
+				alert('This project has the same topic.');
+			});
+			}
+			
+			else {
+				window.location.href = "http://luffy.ee.ncku.edu.tw:8011/login";
+			}
+		</script>
+		
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.js"></script>
+		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
+		<script type="text/javascript" src="quill.js"></script>
+		<script type="text/javascript" src="advanced.js"></script>
+	</body>
+</html>
