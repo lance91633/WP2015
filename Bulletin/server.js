@@ -3,13 +3,14 @@
 	var express = require('express');
 	var http = require('http').Server(app);
 	var io = require('socket.io')(http);
+	var USER_PASSWD = process.argv[2];
 
 	var AccountData = null;
 
 	//set database
 	var mongoose = require('mongoose');
-	mongoose.connect('mongodb://team7:handsomeboys@localhost/team7' , function(){
-		console.log('mongoose connect check !');
+	mongoose.connect('mongodb://team7:'+USER_PASSWD+'@localhost/team7' , function(){
+	console.log('mongoose connect check !');
 	});
 
 	var db = mongoose.connection;
