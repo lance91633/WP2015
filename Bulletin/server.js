@@ -651,6 +651,7 @@
 						star4 : 0,
 						star5 : 0,
 					};
+					
 					for(i=0;i<res.length;i++){
 					
 						average += res[i].star;
