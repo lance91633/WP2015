@@ -142,9 +142,8 @@ http://www.templatemo.com/free-website-templates/417-grill
 													<p id='introduce' style='width:700px'></p>
                                                     
 													<div id = 'star'>
-													    
-														<div id = 'starButton'>
-														    <h3>You can give star to this article.</h3>
+													    <h3>You can give star to this article.</h3>
+														<div id = 'starButton'>														    
 															<button id = 'star1'>1</button><button id = 'star2'>2</button><button id = 'star3'>3</button><button id = 'star4'>4</button><button id = 'star5'>5</button>
 														</div>
 														<p id = 'average'></p>
@@ -301,12 +300,15 @@ http://www.templatemo.com/free-website-templates/417-grill
 				percent : $('#percent').val(),
 				date : d.getFullYear()+'/'+d.getMonth()+'/'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds()+'.'+d.getMilliseconds()
 			  };
-			  console.log(BuyData.date);
 			  socket.emit('buy',BuyData);
 			  
 			}
 		  });
 		  socket.on('buy_res', function(data){
+		    console.log(data.buyAll);
+		    if(data.star == false){
+			    $('#starButton').show();
+			}
 			if(data.buyAll == 1){
 			  $('#content').html(data.content);
 			  $('#buy').hide();
@@ -319,6 +321,8 @@ http://www.templatemo.com/free-website-templates/417-grill
 			}
 			$('#free').hide();		
 		  });
+		  
+		  
 		  socket.on('read_it_get',function(data){
 		    if(data == false){
 			    window.location.href = 'http://luffy.ee.ncku.edu.tw:8011/user';
@@ -346,22 +350,29 @@ http://www.templatemo.com/free-website-templates/417-grill
 		  });
 		  
 		  socket.on('get_it_star',function(data){
-		    if(data == false){
-			    $('#average').html('There is no people give star.');
+		    var str2 = '';
+			var str = '';
+			console.log(data.payMoney);
+			if(data.payMoney == false){
+			    str2 = 'Paying money and you can use star service.';
+				$('#starButton').hide();
 			}
-			else{
-				var str;
+		    if(data.noPeople == true){			    
+			    str = 'There is no people give star.';				
+			}			
+			else{				
 				if(data.you != false){
-				str = ' You give this article '+data.you+' star.<br> Average :'+data.average+' <br> 1 star : '+data.count.star1+' people <br> 2 stars : '+data.count.star2+' people <br> 3 stars : '+data.count.star3+' people <br> 4 stars : '+data.count.star4+' people <br> 5 stars : '+data.count.star5 +' people <br> There are '+data.total+' people give this article star.'
-				    $('#average').html(str);
+				    str = ' You give this article '+data.you+' star.<br> Average :'+data.average+' <br> 1 star : '+data.count.star1+' people <br> 2 stars : '+data.count.star2+' people <br> 3 stars : '+data.count.star3+' people <br> 4 stars : '+data.count.star4+' people <br> 5 stars : '+data.count.star5 +' people <br> There are '+data.total+' people give this article star.'
+				    //$('#average').html(str);
 				    $('#starButton').hide();
 				}
 				else{
 				    str = 'Average :'+data.average+' <br> 1 star : '+data.count.star1+' people <br> 2 stars : '+data.count.star2+' people <br> 3 stars : '+data.count.star3+' people <br> 4 stars : '+data.count.star4+' people <br> 5 stars : '+data.count.star5 +' people <br> There are '+data.total+' people give this article star.'
-				    $('#average').html(str);	
+				    //$('#average').html(str);	
 					
 				}
 			}
+			$('#average').html(str + '<br>' + str2);
 		  });
 
 		  /*function getCookie(cname) {
