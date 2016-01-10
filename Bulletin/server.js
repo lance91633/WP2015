@@ -745,7 +745,7 @@
 	  res.sendfile('public/login.html');
 	});
 	app.get('/new_project_format', function(req, res){
-	  res.sendfile('public/new_project_format_back.html');
+	  res.sendfile('public/new_project_format.html');
 	});
 	app.get('/read_it', function(req, res){
 	  res.sendfile('public/single-post.html');  
