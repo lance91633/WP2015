@@ -164,7 +164,7 @@ p {
 				//str += 'You spent '+data[i].price*data[i].count+'$ on '+data[i].count * 10+'% of the article " '+data[i].topic+' " at '+data[i].date+'<br>';
 				str+='<tr><td>'+'<a href="http://luffy.ee.ncku.edu.tw:8011/read_it"'+' onclick='+"'"+'localStorage.setItem("'+'topic",'+'"'+data[i].topic+'"'+')'+"'"+'>'+data[i].topic+'</a>'+'</td><td>'
 						+data[i].count * 10	+'</td><td>'
-						+data[i].price*data[i].count+'</td><td>'
+						+((data[i].price*data[i].count).toFixed(2))+'</td><td>'
 						+data[i].date+'</td></tr>';
 			}
 			str = '<table class=\"ui celled table\"><thead><tr><th>Article</th><th>%</th><th>Money</th><th>Date</th></tr></thead><tbody>' + str + '</tbody></table>';
