@@ -57,6 +57,7 @@
 		star : {type : Number}
 	  });
 	  var Profile_Photo = new Schema({
+		account : {type : String},
 		content_type : {type : String},
 		img : {type : String}
 	  });
@@ -339,8 +340,29 @@
 		});
 	});	
 	
+	socket.on('req_profile_photo',function(data){
+		//read profile photo
+		Profile_Photo.findOne({account: data},function(err, result){
+			if(err)	{
+				console.log('get profile photo error');
+				socket.emit('res_profile_photo', false);
+			}
+
+			else{
+				if (result == null){
+					console.log('no profile photo');
+					socket.emit('res_profile_photo', false);
+				}
+				else{
+					console.log('profile photo exit');
+					socket.emit('res_profile_photo', result);
+				}			
+			}
+		});	
+	});
+
 	//get profile data
-	socket.on('req_profile', function(data){
+	socket.on('req_profile', function(data){		
 		//data = localStorage.account (未來也可以是朋友的account，就變成localStorage.friend之類的)
 		User_data.findOne({account : data},function(err, result){
 			if (err){
@@ -735,13 +757,15 @@
 	  //profile照片上傳
 		socket.on('profile_photo_upload',function(data){
 			new Profile_Photo({
+				account : data.account,
 				content_type : data.content_type,	
 				img: data.img	
 			}).save();
-		 // socket.emit('profile_photo_gogo');
+			console.log(data);
 		});
 	  //profile照片上傳
-	  /////////////////////////////////////
+	  ////////////////////////////////////
+		
 	  });  
 	});
 	
