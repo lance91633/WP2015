@@ -193,15 +193,20 @@ function encodeImageFileAsURL(){
 		   var bsrcData = btoa(fileLoadedEvent.target.result);//bin to 64 need to be send back
           //  $(profile_img).attr("src",bsrcData)
 		
-		console.log(bsrcData);
-		profile_img.src = "data:image/png;base64,"+bsrcData; 		
-      	}
+			console.log(bsrcData);
+			profile_img.src = "data:image/png;base64,"+bsrcData; 
+			var profileP =	{
+				content_type : 'image/png',
+ 				img : bsrcData 
+			}
+			console.log(profileP);	
+			socket.emit('profile_photo_upload', profileP);
+		}
        // fileReader.readAsDataURL(fileToLoad);
 		fileReader.readAsBinaryString(fileToLoad);
     }
 }
 
-//url to image
 
 </script>
 	
