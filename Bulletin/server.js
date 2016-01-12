@@ -56,12 +56,16 @@
 		topic : {type : String},
 		star : {type : Number}
 	  });
+	  var Profile_Photo = new Schema({
+		content_type : {type : String},
+		img : {type : String}
+	  });
 	  var User = mongoose.model('account' , AccountMg);
 	  var User_data = mongoose.model('data' , UserData);
 	  var User_project = mongoose.model('project' , Project);
 	  var Consume_record = mongoose.model('record', Record);
 	  var Star = mongoose.model('star',Star);
-	  
+	  var Profile_Photo = mongoose.model('profile_img',Profile_Photo);
 	  
 	  io.on('connection',function(socket){
 			
@@ -726,6 +730,18 @@
 		});
 		//文章評分
 		///////////////////////////////////
+	  
+	  /////////////////////////////////////
+	  //profile照片上傳
+		socket.on('profile_photo_upload',function(data){
+			new Profile_Photo({
+				content_type : data.content_type,	
+				img: data.img	
+			}).save();
+		 // socket.emit('profile_photo_gogo');
+		});
+	  //profile照片上傳
+	  /////////////////////////////////////
 	  });  
 	});
 	
