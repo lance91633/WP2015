@@ -119,6 +119,19 @@ p {
 		if (localStorage.account != null){ //先登入才能看個資
 
 			socket.emit('req_profile', localStorage.account);
+			socket.emit('req_profile_photo',localStorage.account);
+
+			socket.on('res_profile_photo', function(data){
+				if(data == false){
+					profile_img.src = "images/profilePhoto.png";
+				}
+
+				else {
+					profile_img.src = "data:data.content_type;base64,"+data.img; 
+				} 					
+			});
+
+
 			socket.on('res_profile', function(data){
 				//data = user_data JSON
 				if(data == false){
@@ -196,6 +209,7 @@ function encodeImageFileAsURL(){
 			console.log(bsrcData);
 			profile_img.src = "data:image/png;base64,"+bsrcData; 
 			var profileP =	{
+				account : localStorage.account,
 				content_type : 'image/png',
  				img : bsrcData 
 			}

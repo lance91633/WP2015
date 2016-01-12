@@ -1148,7 +1148,7 @@ http://www.templatemo.com/free-website-templates/417-grill
 	//	socket.emit('load' , true);
 		socket.on('response', function(data){
 		$("#profilepage").append(localStorage.account+', your profile');
-		
+
 		  if(data == false && localStorage.getItem('account') == null){
 		    window.location.href = "http://luffy.ee.ncku.edu.tw:8011/";
 		  }
