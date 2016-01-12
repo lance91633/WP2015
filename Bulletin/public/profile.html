@@ -177,7 +177,7 @@ p {
 	//*******************************************
 	//use for change the profile_img.src
 	//2016-01-12 Didn't send back to the mongodb yet
-	//*****************************************
+	//*****************************************		
 function encodeImageFileAsURL(){
 
     var filesSelected = document.getElementById("inputFileToLoad").files;
@@ -189,15 +189,19 @@ function encodeImageFileAsURL(){
 
         fileReader.onload = function(fileLoadedEvent) {
             var srcData = fileLoadedEvent.target.result; // <--- data: base64
-           // var newImage = document.createElement('img');
-            //$(profile_img).attr("src","data:image/png;base64,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")
-		console.log(srcData);
-		profile_img.src = srcData; 
+           //bsrcData為要用socket傳回去資料庫的object
+		   var bsrcData = btoa(fileLoadedEvent.target.result);//bin to 64 need to be send back
+          //  $(profile_img).attr("src",bsrcData)
+		
+		console.log(bsrcData);
+		profile_img.src = "data:image/png;base64,"+bsrcData; 		
       	}
-        fileReader.readAsDataURL(fileToLoad);
+       // fileReader.readAsDataURL(fileToLoad);
+		fileReader.readAsBinaryString(fileToLoad);
     }
 }
 
+//url to image
 
 </script>
 	
