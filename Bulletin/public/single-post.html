@@ -140,14 +140,15 @@ http://www.templatemo.com/free-website-templates/417-grill
 														 						
 													</form>
 													<button type = "button" class="btn btn-success" id='buy'>I want to buy this article.(Select how many you want to buy)</button>
-													<span><input id="input-21f" value="0" type="number" min=0 max=5 step=1 ><button type = "button" class="btn btn-success" id='buy'>I want</button></span>
+													<input id="input-21f" value="0" type="number" min=0 max=5 step=1 >
+													
 													</center>
 													<h1>Introduction</h1>
 													<p id='introduce' style='width:700px'></p>
                                                     
 													<div id = 'star'>
 													
-													    <h1>You can give star to this article.</h1>
+													    <h1>Rating</h1>
 														<div id = 'starButton' class = "btn-group">														    
 															<button id = 'star1' class = "btn btn-primary">1</button><button id = 'star2' class = "btn btn-primary">2</button><button id = 'star3' class = "btn btn-primary">3</button><button id = 'star4' class = "btn btn-primary">4</button><button id = 'star5' class = "btn btn-primary">5</button>
 														</div>
@@ -310,7 +311,7 @@ http://www.templatemo.com/free-website-templates/417-grill
 		  socket.on('buy_res', function(data){
 		    console.log(data.buyAll);
 		    if(data.star == false){
-			    //$('#starButton').show();
+			    $('#starButton').show();
 			    $('#input-21f').show();
 			}
 			if(data.buyAll == 1){
@@ -360,7 +361,7 @@ http://www.templatemo.com/free-website-templates/417-grill
 			if(data.payMoney == false){
 			    str2 = 'Paying money and you can use star service.';
 				$('#starButton').hide();
-				$('#input-21f').hide();
+				//$('#input-21f').hide();
 			}
 		    if(data.noPeople == true){			    
 			    str = 'There is no people give star.';				
@@ -370,10 +371,10 @@ http://www.templatemo.com/free-website-templates/417-grill
 				    str = ' You give this article '+data.you+' star.<br> Average :'+data.average+' <br> 1 star : '+data.count.star1+' people <br> 2 stars : '+data.count.star2+' people <br> 3 stars : '+data.count.star3+' people <br> 4 stars : '+data.count.star4+' people <br> 5 stars : '+data.count.star5 +' people <br> There are '+data.total+' people give this article star.'
 				    //$('#average').html(str);
 				    $('#starButton').hide();
-					$('#input-21f').hide();
+					//$('#input-21f').hide();
 				}
 				else{
-				    str = 'Average :'+data.average+' <br> 1 star : '+data.count.star1+' people <br> 2 stars : '+data.count.star2+' people <br> 3 stars : '+data.count.star3+' people <br> 4 stars : '+data.count.star4+' people <br> 5 stars : '+data.count.star5 +' people <br> There are '+data.total+' people give this article star.'
+				    str = 'Average :'+data.average.toFixed(2)+' <br> 1 star : '+data.count.star1+' people <br> 2 stars : '+data.count.star2+' people <br> 3 stars : '+data.count.star3+' people <br> 4 stars : '+data.count.star4+' people <br> 5 stars : '+data.count.star5 +' people <br> There are '+data.total+' people give this article star.'
 				    //$('#average').html(str);	
 					
 				}
@@ -483,7 +484,8 @@ http://www.templatemo.com/free-website-templates/417-grill
 		  });
 		  
 		  socket.on('res_star',function(data){
-			var str = ' You give this article '+data.you+' star. <br> Average :'+data.average+' <br> 1 star : '+data.count.star1+' people <br> 2 stars : '+data.count.star2+' people <br> 3 stars : '+data.count.star3+' people <br> 4 stars : '+data.count.star4+' people <br> 5 stars : '+data.count.star5 +' people <br> There are '+data.total+' people give this article star.'
+			//var str = ' You give this article '+data.you+' star. <br> Average :'+data.average+' <br> 1 star : '+data.count.star1+' people <br> 2 stars : '+data.count.star2+' people <br> 3 stars : '+data.count.star3+' people <br> 4 stars : '+data.count.star4+' people <br> 5 stars : '+data.count.star5 +' people <br> There are '+data.total+' people give this article star.'
+			var str = '<a><i class="fa fa-star"></i>:'+data.average+'</a>'
 			$('#average').html(str);
 			$('#starButton').hide();
 		  });
