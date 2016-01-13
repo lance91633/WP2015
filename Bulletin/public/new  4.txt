@@ -1,0 +1,3 @@
+btn_id ===> input_id
++submit 
+check value ==> jquery.onclick
