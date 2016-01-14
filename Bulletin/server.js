@@ -82,8 +82,7 @@
 			else{
 			  User.findOne({pwd : data.pwd},function(err, result){
 				  
-				console.log('findOne pwd check !');
-				  
+				console.log('findOne pwd check !!');			  
 				if(result != null){
 					socket.emit('check', 'This password had been built.')
 				}
